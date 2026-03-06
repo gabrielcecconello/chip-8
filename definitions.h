@@ -1,0 +1,9 @@
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
+#define MEMORY_SIZE 4096
+#define SCREEN_WIDTH 64
+#define SCREEN_HEIGHT 32
+#define START_ADDRESS 0x200
+
+#endif
