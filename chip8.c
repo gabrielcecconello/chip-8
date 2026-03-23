@@ -1,4 +1,6 @@
+#include <stdint.h>
 #include "chip8.h"
+#include "definitions.h"
 
 static const uint8_t fontset[80] = {
     0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
@@ -44,14 +46,14 @@ void chip8_init(Chip8 *chip8) {
     memset(chip8->display, 0, sizeof(chip8->display));
 
     // Initializes part of the memory with the established fontset
-    for(size_t i = 0; i < sizeof(fontset); i++) {
+    for (size_t i = 0; i < sizeof(fontset); i++) {
         chip8->memory[0x50 + i] = fontset[i];
     }
 }
 
 void chip8_load_rom(Chip8 *chip8) {
     FILE *rom = fopen(rom_path, "rb");
-    if(!rom) {
+    if (!rom) {
         printf("Failed to open ROM.\n");
         return;
     }
@@ -59,11 +61,22 @@ void chip8_load_rom(Chip8 *chip8) {
     size_t rom_size = get_rom_size(rom);
     int max_program_size = sizeof(chip8->memory) - START_ADDRESS;
 
-    if(rom_size > max_program_size) {
+    if (rom_size > max_program_size) {
         printf("ROM size is bigger than free memory space.\n");
         return;
     }
 
     fread(&chip8->memory[START_ADDRESS], sizeof(uint8_t), rom_size, rom);
     fclose(rom);
+}
+
+uint16_t chip8_fetch(Chip8 *chip8) {
+    uint16_t pc = chip8->pc;
+
+    uint16_t opcode =
+        (chip8->memory[pc] << 8) |
+        chip8->memory[pc + 1];
+
+    chip8->pc += 2;
+    return opcode;
 }

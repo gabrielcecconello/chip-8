@@ -1,4 +1,6 @@
+#include <stdint.h>
 #include "chip8.h"
+#include "operations.h"
 
 Chip8 chip8;
 
@@ -7,7 +9,7 @@ int main() {
     chip8_load_rom(&chip8);
 
     // Fetch/Decode/Execute loop
-    while(1) {
+    while (1) {
         uint16_t opcode = chip8_fetch(&chip8);
 
         // Extracting nibbles from current instruction
@@ -21,9 +23,9 @@ int main() {
         uint16_t nnn = opcode & 0x0FFF;
         
         // Decode/Execute switch block
-        switch(n1) {
+        switch (n1) {
             case 0x0:
-                switch(nnn) {
+                switch (nnn) {
                     case 0x0E0:
                         op_clear_screen(&chip8);
                         break;

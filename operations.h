@@ -1,6 +1,7 @@
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
 
+#include <stdint.h>
 #include "chip8.h";
 
 void op_clear_screen(Chip8 *chip8);

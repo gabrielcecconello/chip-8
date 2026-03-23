@@ -18,5 +18,6 @@ typedef struct {
 
 void chip8_init(Chip8 *chip8);
 void chip8_load_rom(Chip8 *chip8);
+uint16_t chip8_fetch(Chip8 *chip8);
 
 #endif
