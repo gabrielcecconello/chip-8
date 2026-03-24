@@ -1,7 +1,9 @@
 #include "operations.h"
 #include "definitions.h"
 #include "chip8.h"
+#include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 void op_clear_screen(Chip8 *chip8) {
     memset(chip8->display, 0, sizeof(chip8->display));
@@ -33,7 +35,11 @@ void op_add_vx(Chip8 *chip8, uint8_t x, uint8_t immediate) {
 }
 
 void op_set_index(Chip8 *chip8, uint16_t addr) {
-   chip8->index_reg = addr;
+   chip8->index_register = addr;
+}
+
+uint8_t extract_pixel(uint8_t sprite, int offset) {
+    return (sprite >> (7 - offset)) & 1;
 }
 
 void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
@@ -43,7 +49,7 @@ void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
     chip8->v_registers[VF] = 0;
 
     for (uint8_t j = 0; j < n && y_coordinate + j < SCREEN_HEIGHT; j++) {
-        uint8_t sprite = chip8->memory[chip8->index_reg + j];
+        uint8_t sprite = chip8->memory[chip8->index_register + j];
 
         for (int i = 0; i < 8 && x_coordinate + i < SCREEN_WIDTH; i++) {
             uint8_t pixel = extract_pixel(sprite, i);
@@ -59,8 +65,4 @@ void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
             }
         }
     }
-}
-
-uint8_t extract_pixel(uint8_t sprite, int offset) {
-    return (sprite >> (7 - offset)) & 1;
 }

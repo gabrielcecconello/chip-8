@@ -1,4 +1,7 @@
+#include <stdio.h>
+#include <string.h>
 #include <stdint.h>
+#include <stddef.h>
 #include "chip8.h"
 #include "definitions.h"
 
@@ -59,7 +62,7 @@ void chip8_load_rom(Chip8 *chip8) {
     }
    
     size_t rom_size = get_rom_size(rom);
-    int max_program_size = sizeof(chip8->memory) - START_ADDRESS;
+    size_t max_program_size = sizeof(chip8->memory) - START_ADDRESS;
 
     if (rom_size > max_program_size) {
         printf("ROM size is bigger than free memory space.\n");
