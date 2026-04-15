@@ -1,14 +1,16 @@
 CC := gcc
-CFLAGS := -Wall -Wextra
+
+CFLAGS := -Wall -Wextra $(shell sdl2-config --cflags)
+LDFLAGS := $(shell sdl2-config --libs)
 
 TARGET := chip8
-SRC := ./main.c ./chip8.c ./operations.c
+SRC := ./main.c ./chip8.c ./operations.c ./graphics.c
 OBJ := $(SRC:.c=.o)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

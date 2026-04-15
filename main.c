@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "chip8.h"
+#include "graphics.h"
 #include "operations.h"
 
 Chip8 chip8;
@@ -7,6 +8,7 @@ Chip8 chip8;
 int main() {
     chip8_init(&chip8);
     chip8_load_rom(&chip8);
+    init_window();
 
     // Fetch/Decode/Execute loop
     while (1) {
