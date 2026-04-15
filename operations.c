@@ -38,7 +38,7 @@ void op_set_index(Chip8 *chip8, uint16_t addr) {
    chip8->index_register = addr;
 }
 
-uint8_t extract_pixel(uint8_t sprite, int offset) {
+static uint8_t extract_pixel(uint8_t sprite, int offset) {
     return (sprite >> (7 - offset)) & 1;
 }
 

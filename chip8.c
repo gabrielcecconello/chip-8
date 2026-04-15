@@ -24,7 +24,7 @@ static const uint8_t fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-size_t get_rom_size(FILE *rom) {
+static size_t get_rom_size(FILE *rom) {
     fseek(rom, 0, SEEK_END);
     size_t rom_size = (size_t) ftell(rom);
     rewind(rom);
