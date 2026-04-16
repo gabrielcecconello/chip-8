@@ -4,13 +4,14 @@
 #include "graphics.h"
 #include "definitions.h"
 
+static const uint32_t subsystem_flags = SDL_INIT_TIMER | SDL_INIT_VIDEO;
 static const uint32_t window_flags = SDL_WINDOW_RESIZABLE;
 static const uint32_t renderer_flags = SDL_RENDERER_ACCELERATED;
 
 void graphics_init(Graphics *graphics) {
     memset(graphics->raw_pixels, 0, sizeof(graphics->raw_pixels));
 
-    SDL_InitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO);
+    SDL_InitSubSystem(subsystem_flags);
 
     // Window is where the image is displayed
     graphics->window = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -40,4 +41,21 @@ void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WID
     SDL_UpdateTexture(graphics->texture, NULL, graphics->raw_pixels, SCREEN_WIDTH * sizeof(uint32_t));
     SDL_RenderCopy(graphics->renderer, graphics->texture, NULL, NULL);
     SDL_RenderPresent(graphics->renderer);
+}
+
+void graphics_destroy(Graphics *graphics) {
+    if (graphics->texture) {
+        SDL_DestroyTexture(graphics->texture);
+        graphics->texture = NULL;
+    }
+    if (graphics->renderer) {
+        SDL_DestroyRenderer(graphics->renderer);
+        graphics->renderer = NULL;
+    }
+    if (graphics->window) {
+        SDL_DestroyWindow(graphics->window);
+        graphics->window = NULL; 
+    }
+    SDL_QuitSubSystem(subsystem_flags);
+    SDL_Quit();
 }

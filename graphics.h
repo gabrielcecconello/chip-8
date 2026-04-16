@@ -14,5 +14,6 @@ typedef struct {
 
 void graphics_init(Graphics *graphics);
 void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH]);
+void graphics_destroy(Graphics *graphics);
 
 #endif
