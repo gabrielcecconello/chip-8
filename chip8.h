@@ -6,7 +6,7 @@
 
 typedef struct {
     uint8_t memory[MEMORY_SIZE];
-    uint8_t display[SCREEN_WIDTH][SCREEN_HEIGHT];
+    uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH];
     uint8_t delay_timer;
     uint8_t sound_timer;
     uint8_t v_registers[16];

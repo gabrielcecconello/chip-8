@@ -1,10 +1,12 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#define VF 15
+#define WHITE_PIXEL 0xFFFFFFFF
+#define BLACK_PIXEL 0x00000000
 #define MEMORY_SIZE 4096
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
 #define START_ADDRESS 0x200
-#define VF 15
 
 #endif

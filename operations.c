@@ -48,14 +48,14 @@ void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
     
     chip8->v_registers[VF] = 0;
 
-    for (uint8_t j = 0; j < n && y_coordinate + j < SCREEN_HEIGHT; j++) {
-        uint8_t sprite = chip8->memory[chip8->index_register + j];
+    for (uint8_t i = 0; i < n && y_coordinate + i < SCREEN_HEIGHT; i++) {
+        uint8_t sprite = chip8->memory[chip8->index_register + i];
 
-        for (int i = 0; i < 8 && x_coordinate + i < SCREEN_WIDTH; i++) {
-            uint8_t pixel = extract_pixel(sprite, i);
+        for (int j = 0; j < 8 && x_coordinate + j < SCREEN_WIDTH; j++) {
+            uint8_t pixel = extract_pixel(sprite, j);
 
             if (pixel == 1) {
-                uint8_t *current_pixel = &chip8->display[x_coordinate + i][y_coordinate + j];
+                uint8_t *current_pixel = &chip8->display[y_coordinate + i][x_coordinate + j];
                 uint8_t old_value = *current_pixel;
 
                 *current_pixel ^= pixel;
