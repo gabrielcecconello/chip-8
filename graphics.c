@@ -8,17 +8,19 @@ static const uint32_t subsystem_flags = SDL_INIT_TIMER | SDL_INIT_VIDEO;
 static const uint32_t window_flags = SDL_WINDOW_RESIZABLE;
 static const uint32_t renderer_flags = SDL_RENDERER_ACCELERATED;
 
-void graphics_init(Graphics *graphics) {
+int graphics_init(Graphics *graphics) {
     memset(graphics->raw_pixels, 0, sizeof(graphics->raw_pixels));
 
-    SDL_InitSubSystem(subsystem_flags);
+    if (SDL_InitSubSystem(subsystem_flags) < 0) return 1;
 
     // Window is where the image is displayed
     graphics->window = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                     800, 600, window_flags);
+    if (!graphics->window) return 1;
     
     // Renderer is what draws the image
     graphics->renderer = SDL_CreateRenderer(graphics->window, -1, renderer_flags);
+    if (!graphics->renderer) return 1;
 
     // Setting renderer's logical size to allow automatic scalling
     SDL_RenderSetLogicalSize(graphics->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -26,6 +28,9 @@ void graphics_init(Graphics *graphics) {
     // Texture is the image that it's drawn 
     graphics->texture = SDL_CreateTexture(graphics->renderer, SDL_PIXELFORMAT_RGBA8888,
                     SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
+    if (!graphics->texture) return 1;
+
+    return 0;
 }
 
 void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH]) {
@@ -40,22 +45,19 @@ void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WID
     // Draws and refreshes the screen  
     SDL_UpdateTexture(graphics->texture, NULL, graphics->raw_pixels, SCREEN_WIDTH * sizeof(uint32_t));
     SDL_RenderCopy(graphics->renderer, graphics->texture, NULL, NULL);
-    SDL_RenderPresent(graphics->renderer);
+    // SDL_RenderPresent(graphics->renderer);
 }
 
 void graphics_destroy(Graphics *graphics) {
-    if (graphics->texture) {
-        SDL_DestroyTexture(graphics->texture);
-        graphics->texture = NULL;
-    }
-    if (graphics->renderer) {
-        SDL_DestroyRenderer(graphics->renderer);
-        graphics->renderer = NULL;
-    }
-    if (graphics->window) {
-        SDL_DestroyWindow(graphics->window);
-        graphics->window = NULL; 
-    }
+    SDL_DestroyTexture(graphics->texture);
+    graphics->texture = NULL;
+
+    SDL_DestroyRenderer(graphics->renderer);
+    graphics->renderer = NULL;
+
+    SDL_DestroyWindow(graphics->window);
+    graphics->window = NULL;
+
     SDL_QuitSubSystem(subsystem_flags);
     SDL_Quit();
 }

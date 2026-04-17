@@ -12,7 +12,7 @@ typedef struct {
     uint32_t raw_pixels[SCREEN_HEIGHT * SCREEN_WIDTH];
 } Graphics;
 
-void graphics_init(Graphics *graphics);
+int graphics_init(Graphics *graphics);
 void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH]);
 void graphics_destroy(Graphics *graphics);
 
