@@ -21,9 +21,17 @@ int main() {
     // Fetch/Decode/Execute loop
     while (1) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                graphics_destroy(&graphics);
-                return 0;
+            switch(event.type) {
+                case SDL_QUIT:
+                    graphics_destroy(&graphics);
+                    return 0;
+                case SDL_WINDOWEVENT:
+                    if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                        graphics_draw(&graphics, chip8.display);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 

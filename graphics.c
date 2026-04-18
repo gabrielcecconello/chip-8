@@ -24,6 +24,7 @@ int graphics_init(Graphics *graphics) {
 
     // Setting renderer's logical size to allow automatic scalling
     SDL_RenderSetLogicalSize(graphics->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    SDL_SetRenderDrawColor(graphics->renderer, 0, 0, 0, 255);
     
     // Texture is the image that it's drawn 
     graphics->texture = SDL_CreateTexture(graphics->renderer, SDL_PIXELFORMAT_RGBA8888,
@@ -42,10 +43,11 @@ void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WID
         }
     }
     
-    // Draws and refreshes the screen  
+    // Clears and draws to renderer  
     SDL_UpdateTexture(graphics->texture, NULL, graphics->raw_pixels, SCREEN_WIDTH * sizeof(uint32_t));
+    SDL_RenderClear(graphics->renderer);
     SDL_RenderCopy(graphics->renderer, graphics->texture, NULL, NULL);
-    // SDL_RenderPresent(graphics->renderer);
+
 }
 
 void graphics_destroy(Graphics *graphics) {
