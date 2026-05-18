@@ -9,6 +9,14 @@ void op_clear_screen(Chip8 *chip8) {
     memset(chip8->display, 0, sizeof(chip8->display));
 }
 
+void op_jump(Chip8 *chip8, uint16_t addr) {
+    if (addr >= MEMORY_SIZE) {
+        printf("Tried to access memory out of bounds.");
+        return;
+    }
+    chip8->pc = addr; 
+}
+
 void op_call_subroutine(Chip8 *chip8, uint16_t addr) {
     if (addr >= MEMORY_SIZE) {
         printf("Tried to access memory out of bounds.");
@@ -33,12 +41,28 @@ void op_return(Chip8 *chip8) {
     chip8->pc = chip8->stack[chip8->stack_pointer];
 }
 
-void op_jump(Chip8 *chip8, uint16_t addr) {
-    if (addr >= MEMORY_SIZE) {
-        printf("Tried to access memory out of bounds.");
-        return;
+void op_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
+    if (chip8->v_registers[x] == immediate) {
+        chip8->pc += 2;
     }
-    chip8->pc = addr; 
+}
+
+void op_not_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
+    if (chip8->v_registers[x] != immediate) {
+        chip8->pc += 2;
+    }
+}
+
+void op_equal(Chip8 *chip8, uint8_t x, uint8_t y) {
+    if (chip8->v_registers[x] == chip8->v_registers[y]) {
+        chip8->pc += 2;
+    }
+}
+
+void op_not_equal(Chip8 *chip8, uint8_t x, uint8_t y) {
+    if (chip8->v_registers[x] != chip8->v_registers[y]) {
+        chip8->pc += 2;
+    }
 }
 
 void op_set_vx(Chip8 *chip8, uint8_t x, uint8_t immediate) {

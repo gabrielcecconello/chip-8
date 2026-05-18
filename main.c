@@ -67,11 +67,23 @@ int main() {
             case 0x2:
                 op_call_subroutine(&chip8, nnn);
                 break;
+            case 0x3:
+                op_equal_immediate(&chip8, n2, nn);
+                break;
+            case 0x4:
+                op_not_equal_immediate(&chip8, n2, nn);
+                break;
+            case 0x5:
+                op_equal(&chip8, n2, n3);
+                break;
             case 0x6:
                 op_set_vx(&chip8, n2, nn);
                 break;
             case 0x7:
                 op_add_vx(&chip8, n2, nn);
+                break;
+            case 0x9:
+                op_not_equal(&chip8, n2, n3);
                 break;
             case 0xA:
                 op_set_index(&chip8, nnn);
