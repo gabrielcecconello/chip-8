@@ -9,6 +9,21 @@ void op_clear_screen(Chip8 *chip8) {
     memset(chip8->display, 0, sizeof(chip8->display));
 }
 
+void op_call_subroutine(Chip8 *chip8, uint16_t addr) {
+    if (addr >= MEMORY_SIZE) {
+        printf("Tried to access memory out of bounds.");
+        return;
+    }
+    if (chip8->stack_pointer == 16) {
+        printf("Stack overflow");
+        return;
+    }
+    chip8->stack[chip8->stack_pointer] = chip8->pc;
+    chip8->stack_pointer += 1;
+
+    chip8->pc = addr;
+}
+
 void op_return(Chip8 *chip8) {
     if (chip8->stack_pointer == 0) {
         printf("Stack underflow.");

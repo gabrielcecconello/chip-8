@@ -64,6 +64,9 @@ int main() {
             case 0x1:
                 op_jump(&chip8, nnn);
                 break;
+            case 0x2:
+                op_call_subroutine(&chip8, nnn);
+                break;
             case 0x6:
                 op_set_vx(&chip8, n2, nn);
                 break;
