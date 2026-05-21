@@ -120,6 +120,12 @@ int main() {
             case 0xA:
                 op_set_index(&chip8, nnn);
                 break;
+            case 0xB:
+                op_jump_offset(&chip8, nnn);
+                break;
+            case 0xC:
+                op_random(&chip8, n2, nn);
+                break;
             case 0xD:
                 op_display(&chip8, n2, n3, n4);
                 graphics_draw(&graphics, chip8.display);

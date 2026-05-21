@@ -3,6 +3,7 @@
 #include "chip8.h"
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 
 void op_clear_screen(Chip8 *chip8) {
@@ -22,7 +23,7 @@ void op_call_subroutine(Chip8 *chip8, uint16_t addr) {
         printf("Tried to access memory out of bounds.");
         return;
     }
-    if (chip8->stack_pointer == 16) {
+    if (chip8->stack_pointer == STACK_SIZE) {
         printf("Stack overflow");
         return;
     }
@@ -90,7 +91,7 @@ void op_xor(Chip8 *chip8, uint8_t x, uint8_t y) {
 }
 
 void op_add(Chip8 *chip8, uint8_t x, uint8_t y) {
-    chip8->v_registers[VF] = (chip8->v_registers[x] + chip8->v_registers[y]) > 255;
+    chip8->v_registers[VF] = (chip8->v_registers[x] + chip8->v_registers[y]) > UINT8_MAX;
     chip8->v_registers[x] += chip8->v_registers[y];
 }
 
@@ -118,6 +119,18 @@ void op_shift_left(Chip8 *chip8, uint8_t x, uint8_t y) {
 
 void op_set_index(Chip8 *chip8, uint16_t addr) {
    chip8->index_register = addr;
+}
+
+void op_jump_offset(Chip8 *chip8, uint16_t addr) {
+    if (addr + chip8->v_registers[0] >= MEMORY_SIZE) {
+        printf("Tried to access memory out of bounds.");
+        return;
+    }
+    chip8->pc = addr + chip8->v_registers[0]; 
+}
+
+void op_random(Chip8 *chip8, uint8_t x, uint8_t immediate) {
+    chip8->v_registers[x] = (rand() % (UINT8_MAX + 1)) & immediate;   
 }
 
 static uint8_t extract_pixel(uint8_t sprite, int offset) {

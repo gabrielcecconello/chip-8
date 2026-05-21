@@ -24,6 +24,8 @@ void op_subtract_yx(Chip8 *chip8, uint8_t x, uint8_t y);
 void op_shift_right(Chip8 *chip8, uint8_t x, uint8_t y);
 void op_shift_left(Chip8 *chip8, uint8_t x, uint8_t y);
 void op_set_index(Chip8 *chip8, uint16_t addr);
+void op_jump_offset(Chip8 *chip8, uint16_t addr);
+void op_random(Chip8 *chip8, uint8_t x, uint8_t immediate);
 void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n);
 
 #endif
