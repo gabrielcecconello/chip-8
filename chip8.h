@@ -9,10 +9,10 @@ typedef struct {
     uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH];
     uint8_t delay_timer;
     uint8_t sound_timer;
-    uint8_t v_registers[16];
+    uint8_t v_registers[NUM_OF_REGISTERS];
     uint16_t pc;
     uint16_t index_register;
-    uint16_t stack[16];
+    uint16_t stack[STACK_SIZE];
     uint16_t stack_pointer;
 } Chip8;
 
