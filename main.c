@@ -77,10 +77,42 @@ int main() {
                 op_equal(&chip8, n2, n3);
                 break;
             case 0x6:
-                op_set_vx(&chip8, n2, nn);
+                op_set_immediate(&chip8, n2, nn);
                 break;
             case 0x7:
-                op_add_vx(&chip8, n2, nn);
+                op_add_immediate(&chip8, n2, nn);
+                break;
+            case 0x8:
+                switch (n4) {
+                    case 0x0:
+                        op_set(&chip8, n2, n3);
+                        break;
+                    case 0x1:
+                        op_or(&chip8, n2, n3);
+                        break;
+                    case 0x2:
+                        op_and(&chip8, n2, n3);
+                        break;
+                    case 0x3:
+                        op_xor(&chip8, n2, n3);
+                        break;
+                    case 0x4:
+                        op_add(&chip8, n2, n3);
+                        break;
+                    case 0x5:
+                        op_subtract_xy(&chip8, n2, n3);
+                        break;
+                    case 0x6:
+                        op_shift_right(&chip8, n2, n3);
+                        break;
+                    case 0x7:
+                        op_subtract_yx(&chip8, n2, n3);
+                        break;
+                    case 0xE:
+                        op_shift_left(&chip8, n2, n3);
+                    default:
+                        break;
+                }
                 break;
             case 0x9:
                 op_not_equal(&chip8, n2, n3);

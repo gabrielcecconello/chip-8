@@ -65,12 +65,55 @@ void op_not_equal(Chip8 *chip8, uint8_t x, uint8_t y) {
     }
 }
 
-void op_set_vx(Chip8 *chip8, uint8_t x, uint8_t immediate) {
+void op_set_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
     chip8->v_registers[x] = immediate;
 }
 
-void op_add_vx(Chip8 *chip8, uint8_t x, uint8_t immediate) {
+void op_add_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
     chip8->v_registers[x] += immediate;
+}
+
+void op_set(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[y];
+}
+
+void op_or(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[x] | chip8->v_registers[y];
+}
+
+void op_and(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[x] & chip8->v_registers[y];
+}
+
+void op_xor(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[x] ^ chip8->v_registers[y];
+}
+
+void op_add(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[VF] = (chip8->v_registers[x] + chip8->v_registers[y]) > 255;
+    chip8->v_registers[x] += chip8->v_registers[y];
+}
+
+void op_subtract_xy(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[VF] = !(chip8->v_registers[x] < chip8->v_registers[y]);
+    chip8->v_registers[x] -= chip8->v_registers[y];
+}
+
+void op_subtract_yx(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[VF] = !(chip8->v_registers[y] < chip8->v_registers[x]);
+    chip8->v_registers[x] = chip8->v_registers[y] - chip8->v_registers[x];
+}
+
+void op_shift_right(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[y];
+    chip8->v_registers[VF] = chip8->v_registers[x] & 0x01;
+    chip8->v_registers[x] >>= 1;
+}
+
+void op_shift_left(Chip8 *chip8, uint8_t x, uint8_t y) {
+    chip8->v_registers[x] = chip8->v_registers[y];
+    chip8->v_registers[VF] = (chip8->v_registers[x] & 0x80) >> 7;
+    chip8->v_registers[x] <<= 1;
 }
 
 void op_set_index(Chip8 *chip8, uint16_t addr) {
