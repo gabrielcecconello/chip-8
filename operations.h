@@ -1,13 +1,12 @@
 #ifndef OPERATIONS_H
 #define OPERATIONS_H
 
-#include <cstdint>
 #include <stdint.h>
 #include "chip8.h"
 
 void op_clear_screen(Chip8 *chip8);
 void op_jump(Chip8 *chip8, uint16_t addr);
-void op_call_subroutine(Chip8 *chip8, uint8_t addr);
+void op_call_subroutine(Chip8 *chip8, uint16_t addr);
 void op_return(Chip8 *chip8);
 void op_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate);
 void op_not_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate);
