@@ -21,7 +21,7 @@ int main() {
     // Fetch/Decode/Execute loop
     while (1) {
         while (SDL_PollEvent(&event)) {
-            switch(event.type) {
+            switch (event.type) {
                 case SDL_QUIT:
                     graphics_destroy(&graphics);
                     return 0;
@@ -29,6 +29,12 @@ int main() {
                     if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
                         graphics_draw(&graphics, chip8.display);
                     }
+                    break;
+                case SDL_KEYDOWN:
+                    chip8_compute_key(&chip8, event.key.keysym.scancode, 1);
+                    break;
+                case SDL_KEYUP:
+                    chip8_compute_key(&chip8, event.key.keysym.scancode, 0);
                     break;
                 default:
                     break;

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <SDL2/SDL.h>
 #include "chip8.h"
 #include "definitions.h"
 
@@ -46,6 +47,8 @@ void chip8_init(Chip8 *chip8) {
     chip8->delay_timer = 0;
     chip8->sound_timer = 0;
 
+    memset(chip8->keypad, 0, sizeof(chip8->keypad));
+
     memset(chip8->display, 0, sizeof(chip8->display));
 
     // Initializes part of the memory with the established fontset
@@ -82,4 +85,59 @@ uint16_t chip8_fetch(Chip8 *chip8) {
 
     chip8->pc += 2;
     return opcode;
+}
+
+void chip8_compute_key(Chip8 *chip8, SDL_Scancode scancode, uint8_t status) {
+    switch (scancode) {
+        case SDL_SCANCODE_1:
+            chip8->keypad[0x1] = status;
+            break;
+        case SDL_SCANCODE_2:
+            chip8->keypad[0x2] = status;
+            break;
+        case SDL_SCANCODE_3:
+            chip8->keypad[0x3] = status;
+            break;
+        case SDL_SCANCODE_4:
+            chip8->keypad[0xC] = status;
+            break;
+        case SDL_SCANCODE_Q:
+            chip8->keypad[0x4] = status;
+            break;
+        case SDL_SCANCODE_W:
+            chip8->keypad[0x5] = status;
+            break;
+        case SDL_SCANCODE_E:
+            chip8->keypad[0x6] = status;
+            break;
+        case SDL_SCANCODE_R:
+            chip8->keypad[0xD] = status;
+            break;
+        case SDL_SCANCODE_A:
+            chip8->keypad[0x7] = status;
+            break;
+        case SDL_SCANCODE_S:
+            chip8->keypad[0x8] = status;
+            break;
+        case SDL_SCANCODE_D:
+            chip8->keypad[0x9] = status;
+            break;
+        case SDL_SCANCODE_F:
+            chip8->keypad[0xE] = status;
+            break;
+        case SDL_SCANCODE_Z:
+            chip8->keypad[0xA] = status;
+            break;
+        case SDL_SCANCODE_X:
+            chip8->keypad[0x0] = status;
+            break;
+        case SDL_SCANCODE_C:
+            chip8->keypad[0xB] = status;
+            break;
+        case SDL_SCANCODE_V:
+            chip8->keypad[0xF] = status;
+            break;
+        default:
+            break;
+    }
 }
