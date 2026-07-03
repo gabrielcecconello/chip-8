@@ -27,5 +27,8 @@ void op_set_index(Chip8 *chip8, uint16_t addr);
 void op_jump_offset(Chip8 *chip8, uint16_t addr);
 void op_random(Chip8 *chip8, uint8_t x, uint8_t immediate);
 void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n);
+void op_skip_key_pressed(Chip8 *chip8, uint8_t x);
+void op_skip_key_not_pressed(Chip8 *chip8, uint8_t x);
+void op_get_key(Chip8* chip8, uint8_t x);
 
 #endif

@@ -25,13 +25,6 @@ static const uint8_t fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-static size_t get_rom_size(FILE *rom) {
-    fseek(rom, 0, SEEK_END);
-    size_t rom_size = (size_t) ftell(rom);
-    rewind(rom);
-    return rom_size;
-}
-
 static const char* rom_path = "./roms/ibm_logo.ch8";
 
 void chip8_init(Chip8 *chip8) {
@@ -47,6 +40,9 @@ void chip8_init(Chip8 *chip8) {
     chip8->delay_timer = 0;
     chip8->sound_timer = 0;
 
+    chip8->last_key_pressed = INVALID_KEY;
+    chip8->key_pressed_and_released = 0;
+
     memset(chip8->keypad, 0, sizeof(chip8->keypad));
 
     memset(chip8->display, 0, sizeof(chip8->display));
@@ -55,6 +51,13 @@ void chip8_init(Chip8 *chip8) {
     for (size_t i = 0; i < sizeof(fontset); i++) {
         chip8->memory[0x50 + i] = fontset[i];
     }
+}
+
+static size_t get_rom_size(FILE *rom) {
+    fseek(rom, 0, SEEK_END);
+    size_t rom_size = (size_t) ftell(rom);
+    rewind(rom);
+    return rom_size;
 }
 
 void chip8_load_rom(Chip8 *chip8) {
@@ -87,57 +90,79 @@ uint16_t chip8_fetch(Chip8 *chip8) {
     return opcode;
 }
 
+static void chip8_track_key(Chip8 *chip8, uint8_t status, uint8_t key) {
+    if (status) {
+        // Starts tracking a key if a key isn't already being tracked
+        if (chip8->last_key_pressed == INVALID_KEY) {
+            chip8->last_key_pressed = key;
+        }
+    }
+    else {
+        // Computes the event if the key being tracked was released
+        if (chip8->last_key_pressed == key) {
+            chip8->key_pressed_and_released = 1; 
+        }
+    }
+}
+
 void chip8_compute_key(Chip8 *chip8, SDL_Scancode scancode, uint8_t status) {
+    uint8_t key = INVALID_KEY;
+
     switch (scancode) {
         case SDL_SCANCODE_1:
-            chip8->keypad[0x1] = status;
+            key = 0x1;
             break;
         case SDL_SCANCODE_2:
-            chip8->keypad[0x2] = status;
+            key = 0x2;
             break;
         case SDL_SCANCODE_3:
-            chip8->keypad[0x3] = status;
+            key = 0x3;
             break;
         case SDL_SCANCODE_4:
-            chip8->keypad[0xC] = status;
+            key = 0xC;
             break;
         case SDL_SCANCODE_Q:
-            chip8->keypad[0x4] = status;
+            key = 0x4;
             break;
         case SDL_SCANCODE_W:
-            chip8->keypad[0x5] = status;
+            key = 0x5;
             break;
         case SDL_SCANCODE_E:
-            chip8->keypad[0x6] = status;
+            key = 0x6;
             break;
         case SDL_SCANCODE_R:
-            chip8->keypad[0xD] = status;
+            key = 0xD;
             break;
         case SDL_SCANCODE_A:
-            chip8->keypad[0x7] = status;
+            key = 0x7;
             break;
         case SDL_SCANCODE_S:
-            chip8->keypad[0x8] = status;
+            key = 0x8;
             break;
         case SDL_SCANCODE_D:
-            chip8->keypad[0x9] = status;
+            key = 0x9;
             break;
         case SDL_SCANCODE_F:
-            chip8->keypad[0xE] = status;
+            key = 0xE;
             break;
         case SDL_SCANCODE_Z:
-            chip8->keypad[0xA] = status;
+            key = 0xA;
             break;
         case SDL_SCANCODE_X:
-            chip8->keypad[0x0] = status;
+            key = 0x0;
             break;
         case SDL_SCANCODE_C:
-            chip8->keypad[0xB] = status;
+            key = 0xB;
             break;
         case SDL_SCANCODE_V:
-            chip8->keypad[0xF] = status;
+            key = 0xF;
             break;
         default:
             break;
+    }
+
+    if (key != INVALID_KEY) {
+        chip8->keypad[key] = status;
+        chip8_track_key(chip8, status, key);
     }
 }

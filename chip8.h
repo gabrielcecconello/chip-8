@@ -10,7 +10,9 @@ typedef struct {
     uint8_t display[SCREEN_HEIGHT][SCREEN_WIDTH];
     uint8_t delay_timer;
     uint8_t sound_timer;
-    uint8_t keypad[16];
+    uint8_t last_key_pressed;
+    uint8_t key_pressed_and_released;
+    uint8_t keypad[KEYPAD_SIZE];
     uint8_t v_registers[NUM_OF_REGISTERS];
     uint16_t pc;
     uint16_t index_register;

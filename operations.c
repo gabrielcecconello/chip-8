@@ -42,27 +42,31 @@ void op_return(Chip8 *chip8) {
     chip8->pc = chip8->stack[chip8->stack_pointer];
 }
 
+void skip_instruction(Chip8 *chip8) {
+    chip8->pc += 2;
+}
+
 void op_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
     if (chip8->v_registers[x] == immediate) {
-        chip8->pc += 2;
+        skip_instruction(chip8);
     }
 }
 
 void op_not_equal_immediate(Chip8 *chip8, uint8_t x, uint8_t immediate) {
     if (chip8->v_registers[x] != immediate) {
-        chip8->pc += 2;
+        skip_instruction(chip8);
     }
 }
 
 void op_equal(Chip8 *chip8, uint8_t x, uint8_t y) {
     if (chip8->v_registers[x] == chip8->v_registers[y]) {
-        chip8->pc += 2;
+        skip_instruction(chip8);
     }
 }
 
 void op_not_equal(Chip8 *chip8, uint8_t x, uint8_t y) {
     if (chip8->v_registers[x] != chip8->v_registers[y]) {
-        chip8->pc += 2;
+        skip_instruction(chip8);
     }
 }
 
@@ -160,4 +164,36 @@ void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
             }
         }
     }
+}
+
+void skip_key_aux(Chip8 *chip8, uint8_t x, uint8_t expected_state) {
+    uint8_t key = chip8->v_registers[x];
+    if (key > 0xF) {
+        printf("Key doesn't exist");
+        return;
+    }
+
+    if (chip8->keypad[key] == expected_state) {
+        skip_instruction(chip8);
+    }
+}
+
+void op_skip_key_pressed(Chip8 *chip8, uint8_t x) {
+    skip_key_aux(chip8, x, 1);
+}
+
+void op_skip_key_not_pressed(Chip8 *chip8, uint8_t x) {
+    skip_key_aux(chip8, x, 0);
+}
+
+void op_get_key(Chip8 *chip8, uint8_t x) {
+    if (!chip8->key_pressed_and_released) {
+        chip8->pc -= 2;
+        return;
+    }
+
+    chip8->v_registers[x] = chip8->last_key_pressed;
+
+    chip8->key_pressed_and_released = 0;
+    chip8->last_key_pressed = INVALID_KEY;
 }

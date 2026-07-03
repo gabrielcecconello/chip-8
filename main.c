@@ -56,11 +56,11 @@ int main() {
         // Decode/Execute switch block
         switch (n1) {
             case 0x0:
-                switch (nnn) {
-                    case 0x0E0:
+                switch (nn) {
+                    case 0xE0:
                         op_clear_screen(&chip8);
                         break;
-                    case 0x0EE:
+                    case 0xEE:
                         op_return(&chip8);
                         break;
                     default:
@@ -135,6 +135,27 @@ int main() {
             case 0xD:
                 op_display(&chip8, n2, n3, n4);
                 graphics_draw(&graphics, chip8.display);
+                break;
+            case 0xE:
+                switch (n3) {
+                    case 0x9:
+                        op_skip_key_pressed(&chip8, n2);
+                        break;
+                    case 0xA:
+                        op_skip_key_not_pressed(&chip8, n2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 0xF:
+                switch (nn) {
+                    case 0x0A:
+                        op_get_key(&chip8, n2);
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 break;
