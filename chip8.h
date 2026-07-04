@@ -21,7 +21,7 @@ typedef struct {
 } Chip8;
 
 void chip8_init(Chip8 *chip8);
-void chip8_load_rom(Chip8 *chip8);
+int chip8_load_rom(Chip8 *chip8, const char *path);
 uint16_t chip8_fetch(Chip8 *chip8);
 void chip8_compute_key(Chip8 *chip8, SDL_Scancode scancode, uint8_t status);
 

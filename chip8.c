@@ -25,8 +25,6 @@ static const uint8_t fontset[80] = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-static const char* rom_path = "./roms/ibm_logo.ch8";
-
 void chip8_init(Chip8 *chip8) {
     memset(chip8->memory, 0, sizeof(chip8->memory));
     chip8->pc = START_ADDRESS;
@@ -60,23 +58,28 @@ static size_t get_rom_size(FILE *rom) {
     return rom_size;
 }
 
-void chip8_load_rom(Chip8 *chip8) {
-    FILE *rom = fopen(rom_path, "rb");
+int chip8_load_rom(Chip8 *chip8, const char *path) {
+    FILE *rom = fopen(path, "rb");
     if (!rom) {
-        printf("Failed to open ROM.\n");
-        return;
+        return 1;
     }
    
     size_t rom_size = get_rom_size(rom);
     size_t max_program_size = sizeof(chip8->memory) - START_ADDRESS;
 
     if (rom_size > max_program_size) {
-        printf("ROM size is bigger than free memory space.\n");
-        return;
+        fclose(rom);
+        return 1;
     }
 
-    fread(&chip8->memory[START_ADDRESS], sizeof(uint8_t), rom_size, rom);
+    size_t bytes_read = fread(&chip8->memory[START_ADDRESS], sizeof(uint8_t), rom_size, rom);
+    if (bytes_read != rom_size) {
+        fclose(rom);
+        return 1;
+    }
+
     fclose(rom);
+    return 0;
 }
 
 uint16_t chip8_fetch(Chip8 *chip8) {

@@ -7,13 +7,23 @@
 Chip8 chip8;
 Graphics graphics;
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != 2) {
+        printf("Usage: %s *rom_path*\n", argv[0]);
+        return 1;
+    }
+    
     chip8_init(&chip8);
-    chip8_load_rom(&chip8);
+    
+    if (chip8_load_rom(&chip8, argv[1])) {
+        perror("Failed to open ROM");
+        return 1;
+    }
 
     if (graphics_init(&graphics)) {
         graphics_destroy(&graphics);
-        return 0;
+        return 1;
     }
 
     SDL_Event event;
@@ -164,4 +174,5 @@ int main() {
         SDL_RenderPresent(graphics.renderer);
         SDL_Delay(16);
     }
+    return 0;
 }
