@@ -197,3 +197,7 @@ void op_get_key(Chip8 *chip8, uint8_t x) {
     chip8->key_pressed_and_released = 0;
     chip8->last_key_pressed = INVALID_KEY;
 }
+
+void op_add_index(Chip8 *chip8, uint8_t x) {
+    chip8->index_register += chip8->v_registers[x];
+}

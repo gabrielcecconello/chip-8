@@ -163,6 +163,9 @@ int main(int argc, char *argv[]) {
                     case 0x0A:
                         op_get_key(&chip8, n2);
                         break;
+                    case 0x1E:
+                        op_add_index(&chip8, n2);
+                        break;
                     default:
                         break;
                 }
