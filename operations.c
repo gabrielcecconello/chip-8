@@ -217,3 +217,17 @@ void op_font_character(Chip8 *chip8, uint8_t x) {
     uint8_t character = chip8->v_registers[x] & 0x0F;
     chip8->index_register = FONT_START + (character * FONT_HEIGHT);
 }
+
+void op_binary_decimal(Chip8 *chip8, uint8_t x) {
+    uint8_t vx = chip8->v_registers[x];
+    uint16_t i = chip8->index_register;
+
+    if (i > MEMORY_SIZE - 3) {
+        fprintf(stderr, "Binary-coded decimal write out of bounds.");
+        return;
+    }
+
+    chip8->memory[i] = vx / 100;
+    chip8->memory[i + 1] = (vx / 10) % 10;
+    chip8->memory[i + 2] = vx % 10;
+}

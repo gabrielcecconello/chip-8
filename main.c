@@ -169,6 +169,9 @@ int main(int argc, char *argv[]) {
                     case 0x29:
                         op_font_character(&chip8, n2);
                         break;
+                    case 0x33:
+                        op_binary_decimal(&chip8, n2);
+                        break;
                     default:
                         break;
                 }
