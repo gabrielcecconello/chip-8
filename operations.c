@@ -12,7 +12,7 @@ void op_clear_screen(Chip8 *chip8) {
 
 void op_jump(Chip8 *chip8, uint16_t addr) {
     if (addr >= MEMORY_SIZE) {
-        printf("Tried to access memory out of bounds.");
+        fprintf(stderr, "op_jump: address 0x%03X is out of bounds.\n", addr);
         return;
     }
     chip8->pc = addr; 
@@ -20,11 +20,11 @@ void op_jump(Chip8 *chip8, uint16_t addr) {
 
 void op_call_subroutine(Chip8 *chip8, uint16_t addr) {
     if (addr >= MEMORY_SIZE) {
-        printf("Tried to access memory out of bounds.");
+        fprintf(stderr, "op_call_subroutine: address 0x%03X is out of bounds.\n", addr);
         return;
     }
     if (chip8->stack_pointer == STACK_SIZE) {
-        printf("Stack overflow");
+        fprintf(stderr, "op_call_subroutine: stack overflow.\n");
         return;
     }
     chip8->stack[chip8->stack_pointer] = chip8->pc;
@@ -35,7 +35,7 @@ void op_call_subroutine(Chip8 *chip8, uint16_t addr) {
 
 void op_return(Chip8 *chip8) {
     if (chip8->stack_pointer == 0) {
-        printf("Stack underflow.");
+        fprintf(stderr, "op_return: stack underflow.\n");
         return;
     }
     chip8->stack_pointer--;
@@ -137,11 +137,13 @@ void op_set_index(Chip8 *chip8, uint16_t addr) {
 }
 
 void op_jump_offset(Chip8 *chip8, uint16_t addr) {
-    if (addr + chip8->v_registers[0] >= MEMORY_SIZE) {
-        printf("Tried to access memory out of bounds.");
+    uint16_t offset_sum = addr + chip8->v_registers[0];
+
+    if (offset_sum >= MEMORY_SIZE) {
+        fprintf(stderr, "op_jump_offset: address 0x%03X is out of bounds.\n", offset_sum);
         return;
     }
-    chip8->pc = addr + chip8->v_registers[0]; 
+    chip8->pc = offset_sum;
 }
 
 void op_random(Chip8 *chip8, uint8_t x, uint8_t immediate) {
@@ -180,7 +182,7 @@ void op_display(Chip8 *chip8, uint8_t x, uint8_t y, uint8_t n) {
 void skip_key_aux(Chip8 *chip8, uint8_t x, uint8_t expected_state) {
     uint8_t key = chip8->v_registers[x];
     if (key > 0xF) {
-        printf("Key doesn't exist");
+        fprintf(stderr, "skip_key_aux: invalid key value 0x%02X.\n", key);
         return;
     }
 
@@ -223,7 +225,7 @@ void op_binary_decimal(Chip8 *chip8, uint8_t x) {
     uint16_t i = chip8->index_register;
 
     if (i > MEMORY_SIZE - 3) {
-        fprintf(stderr, "Binary-coded decimal write out of bounds.");
+        fprintf(stderr, "op_binary_decimal: conversion would write beyond memory bounds (i = 0x%03X).\n", i);
         return;
     }
 
