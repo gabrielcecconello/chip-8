@@ -12,5 +12,7 @@
 #define NUM_OF_REGISTERS 16
 #define STACK_SIZE 16
 #define START_ADDRESS 0x200
+#define FONT_START 0x50
+#define FONT_HEIGHT 5
 
 #endif

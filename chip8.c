@@ -47,7 +47,7 @@ void chip8_init(Chip8 *chip8) {
 
     // Initializes part of the memory with the established fontset
     for (size_t i = 0; i < sizeof(fontset); i++) {
-        chip8->memory[0x50 + i] = fontset[i];
+        chip8->memory[FONT_START + i] = fontset[i];
     }
 }
 

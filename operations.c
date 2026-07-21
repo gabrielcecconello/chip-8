@@ -212,3 +212,8 @@ void op_get_key(Chip8 *chip8, uint8_t x) {
 void op_add_index(Chip8 *chip8, uint8_t x) {
     chip8->index_register += chip8->v_registers[x];
 }
+
+void op_font_character(Chip8 *chip8, uint8_t x) {
+    uint8_t character = chip8->v_registers[x] & 0x0F;
+    chip8->index_register = FONT_START + (character * FONT_HEIGHT);
+}

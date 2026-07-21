@@ -31,5 +31,6 @@ void op_skip_key_pressed(Chip8 *chip8, uint8_t x);
 void op_skip_key_not_pressed(Chip8 *chip8, uint8_t x);
 void op_get_key(Chip8* chip8, uint8_t x);
 void op_add_index(Chip8* chip8, uint8_t x);
+void op_font_character(Chip8* chip8, uint8_t x);
 
 #endif
