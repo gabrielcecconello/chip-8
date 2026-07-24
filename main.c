@@ -172,6 +172,12 @@ int main(int argc, char *argv[]) {
                     case 0x33:
                         op_binary_decimal(&chip8, n2);
                         break;
+                    case 0x55:
+                        op_store_memory(&chip8, n2);
+                        break;
+                    case 0x65:
+                        op_load_memory(&chip8, n2);
+                        break;
                     default:
                         break;
                 }

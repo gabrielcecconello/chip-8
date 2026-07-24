@@ -233,3 +233,31 @@ void op_binary_decimal(Chip8 *chip8, uint8_t x) {
     chip8->memory[i + 1] = (vx / 10) % 10;
     chip8->memory[i + 2] = vx % 10;
 }
+
+void op_store_memory(Chip8 *chip8, uint8_t x) {
+    uint8_t num_of_variables = x + 1;
+
+    if (chip8->index_register > MEMORY_SIZE - num_of_variables) {
+        fprintf(stderr, "op_store_memory: storing %d variables in memory would write beyond bounds (i = 0x%03X).\n", num_of_variables, chip8->index_register);
+        return;
+    }
+
+    for (uint8_t i = 0; i <= x; i++) {
+        chip8->memory[chip8->index_register] = chip8->v_registers[i];
+        chip8->index_register++;
+    }
+}
+
+void op_load_memory(Chip8 *chip8, uint8_t x) {
+    uint8_t num_of_variables = x + 1;
+
+    if (chip8->index_register > MEMORY_SIZE - num_of_variables) {
+        fprintf(stderr, "op_load_memory: loading %d variables from memory would read beyond bounds (i = 0x%03X).\n", num_of_variables, chip8->index_register);
+        return;
+    }
+
+    for (uint8_t i = 0; i <= x; i++) {
+        chip8->v_registers[i] = chip8->memory[chip8->index_register];
+        chip8->index_register++;
+    }
+}
