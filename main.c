@@ -6,6 +6,9 @@
 Chip8 chip8;
 Graphics graphics;
 
+const double CPU_HZ = 700.0;
+const double CPU_PERIOD = 1.0 / CPU_HZ;
+
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
@@ -27,15 +30,30 @@ int main(int argc, char *argv[]) {
 
     SDL_Event event;
 
+    double seconds_elapsed;
+    double accumulator = 0.0;
+
+    uint64_t current_counter;
+    uint64_t last_counter = SDL_GetPerformanceCounter();
+
     // Fetch/Decode/Execute loop
     while (1) {
+        current_counter = SDL_GetPerformanceCounter();
+
+        seconds_elapsed = (double) (current_counter - last_counter) / SDL_GetPerformanceFrequency();
+
+        last_counter = current_counter;
+
+        accumulator += seconds_elapsed;
+        
         if (chip8_process_events(&event, &chip8, &graphics)) {
             break;
         }
 
-        chip8_cycle(&chip8, &graphics);
-
-        SDL_Delay(16);
+        while (accumulator >= CPU_PERIOD) {
+            chip8_cycle(&chip8, &graphics);
+            accumulator -= CPU_PERIOD;
+        }
     }
 
     return 0;
