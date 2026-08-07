@@ -335,3 +335,12 @@ int chip8_process_events(SDL_Event *event, Chip8 *chip8, Graphics *graphics) {
     return 0;
 }
 
+void chip8_update_timers(Chip8 *chip8) {
+    if (chip8->delay_timer > 0) {
+        chip8->delay_timer--;
+    }
+
+    if (chip8->sound_timer > 0) {
+        chip8->sound_timer--;
+    }   
+}

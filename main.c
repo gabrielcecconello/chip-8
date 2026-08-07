@@ -9,6 +9,9 @@ Graphics graphics;
 const double CPU_HZ = 700.0;
 const double CPU_PERIOD = 1.0 / CPU_HZ;
 
+const double TIMER_HZ = 60.0;
+const double TIMER_PERIOD = 1.0 / TIMER_HZ;
+
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
@@ -31,7 +34,8 @@ int main(int argc, char *argv[]) {
     SDL_Event event;
 
     double seconds_elapsed;
-    double accumulator = 0.0;
+    double cpu_accumulator = 0.0;
+    double timers_accumulator = 0.0;
 
     uint64_t current_counter;
     uint64_t last_counter = SDL_GetPerformanceCounter();
@@ -44,15 +48,21 @@ int main(int argc, char *argv[]) {
 
         last_counter = current_counter;
 
-        accumulator += seconds_elapsed;
-        
+        cpu_accumulator += seconds_elapsed;
+        timers_accumulator += seconds_elapsed;
+            
         if (chip8_process_events(&event, &chip8, &graphics)) {
             break;
         }
 
-        while (accumulator >= CPU_PERIOD) {
+        while (cpu_accumulator >= CPU_PERIOD) {
             chip8_cycle(&chip8, &graphics);
-            accumulator -= CPU_PERIOD;
+            cpu_accumulator -= CPU_PERIOD;
+        }
+
+        while (timers_accumulator >= TIMER_PERIOD) {
+            chip8_update_timers(&chip8);
+            timers_accumulator -= TIMER_PERIOD;
         }
     }
 
