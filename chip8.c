@@ -171,6 +171,7 @@ void chip8_cycle(Chip8 *chip8, Graphics *graphics) {
                     break;
                 case 0xE:
                     op_shift_left(chip8, n2, n3);
+                    break;
                 default:
                     break;
             }
