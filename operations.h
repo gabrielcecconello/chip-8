@@ -35,5 +35,8 @@ void op_font_character(Chip8* chip8, uint8_t x);
 void op_binary_decimal(Chip8* chip8, uint8_t x);
 void op_store_memory(Chip8* chip8, uint8_t x);
 void op_load_memory(Chip8* chip8, uint8_t x);
+void op_set_to_delay(Chip8* chip8, uint8_t x);
+void op_set_delay(Chip8* chip8, uint8_t x);
+void op_set_sound(Chip8* chip8, uint8_t x);
 
 #endif

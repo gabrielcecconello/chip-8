@@ -206,8 +206,17 @@ void chip8_cycle(Chip8 *chip8, Graphics *graphics) {
             break;
         case 0xF:
             switch (nn) {
+                case 0x07:
+                    op_set_to_delay(chip8, n2);
+                    break;
                 case 0x0A:
                     op_get_key(chip8, n2);
+                    break;
+                case 0x15:
+                    op_set_delay(chip8, n2);
+                    break;
+                case 0x18:
+                    op_set_sound(chip8, n2);
                     break;
                 case 0x1E:
                     op_add_index(chip8, n2);

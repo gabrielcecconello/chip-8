@@ -261,3 +261,15 @@ void op_load_memory(Chip8 *chip8, uint8_t x) {
         chip8->index_register++;
     }
 }
+
+void op_set_to_delay(Chip8 *chip8, uint8_t x) {
+    chip8->v_registers[x] = chip8->delay_timer;
+}
+
+void op_set_delay(Chip8 *chip8, uint8_t x) {
+    chip8->delay_timer = chip8->v_registers[x];
+}
+
+void op_set_sound(Chip8 *chip8, uint8_t x) {
+    chip8->sound_timer = chip8->v_registers[x];
+}
