@@ -4,14 +4,11 @@
 #include "graphics.h"
 #include "definitions.h"
 
-static const uint32_t subsystem_flags = SDL_INIT_TIMER | SDL_INIT_VIDEO;
 static const uint32_t window_flags = SDL_WINDOW_RESIZABLE;
 static const uint32_t renderer_flags = SDL_RENDERER_ACCELERATED;
 
 int graphics_init(Graphics *graphics) {
     memset(graphics->raw_pixels, 0, sizeof(graphics->raw_pixels));
-
-    if (SDL_InitSubSystem(subsystem_flags) < 0) return 1;
 
     // Window is where the image is displayed
     graphics->window = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -59,7 +56,4 @@ void graphics_destroy(Graphics *graphics) {
 
     SDL_DestroyWindow(graphics->window);
     graphics->window = NULL;
-
-    SDL_QuitSubSystem(subsystem_flags);
-    SDL_Quit();
 }

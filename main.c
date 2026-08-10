@@ -12,6 +12,8 @@ const double CPU_PERIOD = 1.0 / CPU_HZ;
 const double TIMER_HZ = 60.0;
 const double TIMER_PERIOD = 1.0 / TIMER_HZ;
 
+const uint32_t subsystem_flags = SDL_INIT_VIDEO | SDL_INIT_AUDIO;
+
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
@@ -26,8 +28,15 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    if (SDL_InitSubSystem(subsystem_flags) < 0) {
+        fprintf(stderr, "SDL initialization failed: %s\n", SDL_GetError());
+        return 1;
+    }
+
     if (graphics_init(&graphics)) {
         graphics_destroy(&graphics);
+        SDL_QuitSubSystem(subsystem_flags);
+        SDL_Quit();
         return 1;
     }
 
