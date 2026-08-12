@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <stdint.h>
 #include "chip8.h"
+#include "audio.h"
 #include "graphics.h"
 
 Chip8 chip8;
@@ -39,6 +40,15 @@ int main(int argc, char *argv[]) {
         SDL_Quit();
         return 1;
     }
+
+    if (audio_init(&chip8)) {
+        graphics_destroy(&graphics);
+        audio_destroy();
+        SDL_QuitSubSystem(subsystem_flags);
+        SDL_Quit();
+        return 1;
+    }
+
 
     SDL_Event event;
 
