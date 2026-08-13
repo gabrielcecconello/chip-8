@@ -1,19 +1,26 @@
 CC := gcc
 
-CFLAGS := -Wall -Wextra $(shell sdl2-config --cflags)
+CFLAGS := -Wall -Wextra -Iinclude $(shell sdl2-config --cflags)
 LDFLAGS := $(shell sdl2-config --libs)
 
+DEPFLAGS := -MMD -MP
+
 TARGET := chip8
-SRC := ./main.c ./chip8.c ./operations.c ./graphics.c ./audio.c
-OBJ := $(SRC:.c=.o)
+
+SRC := $(wildcard src/*.c)
+OBJ := $(SRC:src/%.c=build/%.o)
+DEP := $(OBJ:.o=.d)
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+build/%.o: src/%.c
+	@mkdir -p build
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET) $(OBJ)
+	rm -f $(TARGET) $(OBJ) $(DEP)
+
+-include $(DEP)
