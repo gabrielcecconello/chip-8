@@ -4,7 +4,6 @@
 #include <stddef.h>
 #include <SDL2/SDL.h>
 #include "chip8.h"
-#include "graphics.h"
 #include "operations.h"
 #include "definitions.h"
 
@@ -95,7 +94,7 @@ static uint16_t chip8_fetch(Chip8 *chip8) {
     return opcode;
 }
 
-void chip8_cycle(Chip8 *chip8, Graphics *graphics) {
+void chip8_cycle(Chip8 *chip8) {
     uint16_t opcode = chip8_fetch(chip8);
 
     // Extracting nibbles from current instruction
@@ -190,8 +189,6 @@ void chip8_cycle(Chip8 *chip8, Graphics *graphics) {
             break;
         case 0xD:
             op_display(chip8, n2, n3, n4);
-            graphics_draw(graphics, chip8->display);
-            SDL_RenderPresent(graphics->renderer);
             break;
         case 0xE:
             switch (n3) {
@@ -320,17 +317,11 @@ static void chip8_compute_key(Chip8 *chip8, SDL_Scancode scancode, uint8_t statu
     }
 }
 
-int chip8_process_events(SDL_Event *event, Chip8 *chip8, Graphics *graphics) {
+int chip8_process_events(SDL_Event *event, Chip8 *chip8) {
     while (SDL_PollEvent(event)) {
         switch (event->type) {
             case SDL_QUIT:
-                graphics_destroy(graphics);
                 return 1;
-            case SDL_WINDOWEVENT:
-                if (event->window.event == SDL_WINDOWEVENT_RESIZED) {
-                    graphics_draw(graphics, chip8->display);
-                }
-                break;
             case SDL_KEYDOWN:
                 chip8_compute_key(chip8, event->key.keysym.scancode, 1);
                 break;

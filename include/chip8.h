@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <SDL2/SDL.h>
-#include "graphics.h"
 #include "definitions.h"
 
 typedef struct {
@@ -23,8 +22,8 @@ typedef struct {
 
 void chip8_init(Chip8 *chip8);
 int chip8_load_rom(Chip8 *chip8, const char *path);
-void chip8_cycle(Chip8 *chip8, Graphics *graphics);
-int chip8_process_events(SDL_Event *event, Chip8* chip8, Graphics* graphics);
+void chip8_cycle(Chip8 *chip8);
+int chip8_process_events(SDL_Event *event, Chip8* chip8);
 void chip8_update_timers(Chip8 *chip8);
 
 #endif

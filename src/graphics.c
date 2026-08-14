@@ -44,7 +44,7 @@ void graphics_draw(Graphics *graphics, uint8_t display[SCREEN_HEIGHT][SCREEN_WID
     SDL_UpdateTexture(graphics->texture, NULL, graphics->raw_pixels, SCREEN_WIDTH * sizeof(uint32_t));
     SDL_RenderClear(graphics->renderer);
     SDL_RenderCopy(graphics->renderer, graphics->texture, NULL, NULL);
-
+    SDL_RenderPresent(graphics->renderer);
 }
 
 void graphics_destroy(Graphics *graphics) {
