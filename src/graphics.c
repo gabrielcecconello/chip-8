@@ -13,11 +13,19 @@ int graphics_init(Graphics *graphics) {
     // Window is where the image is displayed
     graphics->window = SDL_CreateWindow("CHIP-8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                     800, 600, window_flags);
-    if (!graphics->window) return 1;
-    
+
+    if (!graphics->window) {
+        fprintf(stderr, "graphics_init: failed to create window %s\n", SDL_GetError());
+        return 1;
+    }
+
     // Renderer is what draws the image
     graphics->renderer = SDL_CreateRenderer(graphics->window, -1, renderer_flags);
-    if (!graphics->renderer) return 1;
+
+    if (!graphics->renderer) {
+        fprintf(stderr, "graphics_init: failed to create renderer %s\n", SDL_GetError());
+        return 1;
+    }
 
     // Setting renderer's logical size to allow automatic scalling
     SDL_RenderSetLogicalSize(graphics->renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -26,7 +34,11 @@ int graphics_init(Graphics *graphics) {
     // Texture is the image that it's drawn 
     graphics->texture = SDL_CreateTexture(graphics->renderer, SDL_PIXELFORMAT_RGBA8888,
                     SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
-    if (!graphics->texture) return 1;
+
+    if (!graphics->texture) {
+        fprintf(stderr, "graphics_init: failed to create texture %s\n", SDL_GetError());
+        return 1;
+    }
 
     return 0;
 }
