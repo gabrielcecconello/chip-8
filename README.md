@@ -1,28 +1,30 @@
 ## CHIP-8 Emulator
 
-This project is a CHIP-8 emulator/interpreter written in C, and built with SDL2 for graphics. Currently implements a subset of the CHIP-8 instruction set sufficient to run the IBM Logo ROM.
+[English](README.md) | [Português](README.pt-br.md)
+
+A CHIP-8 emulator/interpreter written in C, using SDL2 for graphics and audio. It implements the full standard CHIP-8 instruction set.
 
 ### About CHIP-8
 
-Created by RCA engineer Joe Weisbecker in 1977 for the COSMAC VIP microcomputer, the CHIP-8 was intended as a simpler way to create programs and games. Instead of directly writing machine language, higher-level hexadecimal instructions could be interpreted on the fly by the CHIP-8 emulator/interpreter.
+Created by RCA engineer Joe Weisbecker in 1977 for the COSMAC VIP microcomputer, CHIP-8 was intended as a simpler way to create programs and games. Instead of writing machine language directly, higher-level hexadecimal instructions could be interpreted on the fly by the CHIP-8 interpreter.
 
-### Status
+### Features
 
-Work in progress. Currently implemented:
-- Core CPU loop (fetch, decode, execute)
-- 64x32 pixel display via SDL2
-- Subset of the CHIP-8 instruction set
+- Full standard CHIP-8 instruction set
+- 64×32 monochrome 60Hz display
+- Sound
+- Hex keypad input mapped to a modern QWERTY layout
 
-To-Do:
-- Full instruction set
-- Timers
-- Keypad input
-- Audio
+### Design notes
+
+This emulator follows the standard CHIP-8 conventions, verified against Timendus' CHIP-8 test suite. Several instructions behave differently across interpreters such as CHIP-48 and SUPER-CHIP. Where these ambiguities exist, this project follows the behavior expected by the standard CHIP-8 test suite, so ROMs written against SUPER-CHIP quirks may not run correctly.
+
+In addition, due to how the original CHIP-8 draws and erases sprites via XOR, some programs may exhibit sprite flicker.
 
 ### Technologies
 
-- **C** - core emulator logic
-- **SDL2** - graphics
+- **C** — core emulator logic
+- **SDL2** — graphics and audio
 
 ### Building and running
 
@@ -37,18 +39,35 @@ To-Do:
 ```bash
 sudo apt install build-essential libsdl2-dev
 make
-./chip8
-```
+./chip8 <rom_path>
 
-> **Note:** ROM path is currently hardcoded. CLI argument support coming soon.
+# example:
+./chip8 roms/games/superpong.ch8
+```
 
 #### Windows
 
 On Windows, it is recommended to use WSL (Windows Subsystem for Linux) and follow the Linux instructions above. Here is a tutorial for [WSL installation](https://learn.microsoft.com/en-us/windows/wsl/install).
 
-### **References**
-- [Tobias V. I. Langhoff's high-level guide](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
-- [SDL2's Wiki](https://wiki.libsdl.org/SDL2/FrontPage)
+### Keypad
 
-### **Author**
+The original CHIP-8 hex keypad is mapped to the left side of a QWERTY keyboard:
+
+```
+CHIP-8 Keypad       Keyboard
+1 2 3 C             1 2 3 4
+4 5 6 D      =>     Q W E R
+7 8 9 E             A S D F
+A 0 B F             Z X C V
+```
+
+### References
+
+- [Tobias V. I. Langhoff's high-level guide](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
+- [SDL2 Wiki](https://wiki.libsdl.org/SDL2/FrontPage)
+- [Timendus' CHIP-8 test suite](https://github.com/Timendus/chip8-test-suite) — test ROMs for verifying opcode behavior
+- [John Earnest's CHIP-8 Archive](https://johnearnest.github.io/chip8Archive/) — public-domain games and programs
+
+### Author
+
 - [Gabriel Luís Pinto Cecconello](https://www.linkedin.com/in/gabriel-cecconello/)
