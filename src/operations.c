@@ -84,14 +84,17 @@ void op_set(Chip8 *chip8, uint8_t x, uint8_t y) {
 
 void op_or(Chip8 *chip8, uint8_t x, uint8_t y) {
     chip8->v_registers[x] = chip8->v_registers[x] | chip8->v_registers[y];
+    chip8->v_registers[VF] = 0;
 }
 
 void op_and(Chip8 *chip8, uint8_t x, uint8_t y) {
     chip8->v_registers[x] = chip8->v_registers[x] & chip8->v_registers[y];
+    chip8->v_registers[VF] = 0;
 }
 
 void op_xor(Chip8 *chip8, uint8_t x, uint8_t y) {
     chip8->v_registers[x] = chip8->v_registers[x] ^ chip8->v_registers[y];
+    chip8->v_registers[VF] = 0;
 }
 
 void op_add(Chip8 *chip8, uint8_t x, uint8_t y) {
